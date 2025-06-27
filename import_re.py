@@ -2,7 +2,6 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import fitz  # PyMuPDF
 import re
-# import csv
 import os
 from pathlib import Path
 
@@ -22,22 +21,16 @@ def extrair_linhas_adicionais(texto):
 
 def salvar_arquivos(linhas, nome_base):
     pasta_downloads = str(Path.home() / "Downloads")
-    caminho_csv = os.path.join(pasta_downloads, f"{nome_base}.csv")
+    # caminho_csv = os.path.join(pasta_downloads, f"{nome_base}.csv")
     caminho_txt = os.path.join(pasta_downloads, f"{nome_base}.txt")
 
-    # Salvar CSV
-    # with open(caminho_csv, 'w', newline='', encoding='utf-8') as f_csv:
-    #    writer = csv.writer(f_csv)
-    #    writer.writerow(["Informações Adicionais"])
-    #    for linha in linhas:
-    #        writer.writerow([linha])
 
-    # Salvar TXT
+# Salvar TXT
     with open(caminho_txt, 'w', encoding='utf-8') as f_txt:
         for linha in linhas:
             f_txt.write(f"{linha}\n")
 
-    return caminho_csv, caminho_txt
+    return caminho_txt
 
 
 # Função acionada no botão
@@ -53,8 +46,8 @@ def processar_pdf():
         messagebox.showinfo("Resultado", "Nenhuma informação encontrada!")
         return
 
-    nome_base = Path(caminho_pdf).stem + "_informacoes"
-    caminho_csv, caminho_txt = salvar_arquivos(linhas, nome_base)
+    nome_base = Path(caminho_pdf).stem + "__VEBEA"
+    caminho_txt = salvar_arquivos(linhas, nome_base)
 
     messagebox.showinfo("Sucesso", f"Arquivo salvo em:\n{caminho_txt}")
 
@@ -70,22 +63,22 @@ app.title("Extrator de serial Vertco")
 largura_janela = 500
 altura_janela = 300
 
-# Obtenha largura e altura da tela do usuário
+# largura e altura da tela do usuário
 largura_tela = app.winfo_screenwidth()
 altura_tela = app.winfo_screenheight()
 
-# Calcule a posição para centralizar
+
 pos_x = (largura_tela // 2) - (largura_janela // 2)
 pos_y = (altura_tela // 2) - (altura_janela // 2)
 
-# Aplique a geometria centralizada
+# Janela Centralizada
 app.geometry(f"{largura_janela}x{altura_janela}+{pos_x}+{pos_y}")
 
 # Widgets
 label = ctk.CTkLabel(app, text="Selecione o arquivo PDF para extrair o serial.", font=ctk.CTkFont(size=20))
-label.pack(pady=30)
+label.pack(pady=50)
 
-botao = ctk.CTkButton(app, fg_color=("orangered"), text="Selecionar PDF", command=processar_pdf)
+botao = ctk.CTkButton(app, fg_color=("#800000"), text="Selecionar PDF", command=processar_pdf)
 botao.pack(pady=10)
 
 app.mainloop()
