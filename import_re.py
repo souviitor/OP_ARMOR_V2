@@ -15,8 +15,18 @@ def extrair_texto_pdf(caminho_pdf):
     return texto
 
 
+#def extrair_linhas_adicionais(texto):
+#    return [f"V092{linha}" for linha in re.findall(r"(0\w+\*[^\n\r]*)", texto)]
+
 def extrair_linhas_adicionais(texto):
-    return [f"V09{linha}" for linha in re.findall(r"(0\w+\*[^\n\r]*)", texto)]
+    # Remove todas as quebras de linha e espaços desnecessários no meio
+    texto_normalizado = re.sub(r"[\n\r\s]+", "", texto)
+
+    # Regex que identifica o padrão completo mesmo sem quebras visíveis
+    padrao = r"\d{5}V\d{6}\*[A-Z]+\d+\*[A-Z]+\*[A-Z]+\*"
+
+    resultados = re.findall(padrao, texto_normalizado)
+    return [f"V09{linha}" for linha in resultados]
 
 
 def salvar_arquivos(linhas, nome_base):
@@ -40,6 +50,7 @@ def processar_pdf():
         return
 
     texto = extrair_texto_pdf(caminho_pdf)
+
     linhas = extrair_linhas_adicionais(texto)
 
     if not linhas:
