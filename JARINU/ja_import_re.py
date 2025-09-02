@@ -17,8 +17,17 @@ def extrair_texto_pdf(caminho_pdf):
 
 
 def extrair_linhas_adicionais(texto):
-    return [f"V04{linha}" for linha in re.findall(r"(0\w+\*[^\n\r]*)", texto)]
+    return [f"V042{linha}" for linha in re.findall(r"(0\w+\*[^\n\r]*)", texto)]
 
+#def extrair_linhas_adicionais(texto):
+    # Remove todas as quebras de linha e espaços desnecessários no meio
+#    texto_normalizado = re.sub(r"[\n\r\s]+", "", texto)
+
+    # Regex que identifica o padrão completo mesmo sem quebras visíveis
+#    padrao = r"\d{5}V\d{6}\*[A-Z]+\d+\*[A-Z]+\*[A-Z]+\*"
+
+#    resultados = re.findall(padrao, texto_normalizado)
+#    return [f"V04{linha}" for linha in resultados]
 
 def salvar_arquivos(linhas, nome_base):
     pasta_downloads = str(Path.home() / "Downloads")
@@ -53,7 +62,7 @@ def processar_pdf():
         messagebox.showinfo("Resultado", "Nenhuma informação encontrada!")
         return
 
-    nome_base = Path(caminho_pdf).stem + "_informacoes"
+    nome_base = Path(caminho_pdf).stem + "__VEBEA__"
     caminho_csv, caminho_txt = salvar_arquivos(linhas, nome_base)
 
     messagebox.showinfo("Sucesso", f"Arquivo salvo em:\n{caminho_txt}")

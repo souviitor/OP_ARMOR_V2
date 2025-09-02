@@ -19,31 +19,25 @@ def extrair_texto_pdf(caminho_pdf):
 #    return [f"V092{linha}" for linha in re.findall(r"(0\w+\*[^\n\r]*)", texto)]
 
 def extrair_linhas_adicionais(texto):
-    # Remove todas as quebras de linha e espaços desnecessários no meio
-    texto_normalizado = re.sub(r"[\n\r\s]+", "", texto)
+    texto_unificado = re.sub(r"[\s\r\n]+", "", texto)
 
-    # Regex que identifica o padrão completo mesmo sem quebras visíveis
-    padrao = r"\d{5}V\d{6}\*[A-Z]+\d+\*[A-Z]+\*[A-Z]+\*"
+    padrao = r"(20925V\d{6}\*CCPCE\d+\*IIIA\*[A-Z0-9]{2,5})\*"
 
-    resultados = re.findall(padrao, texto_normalizado)
-    return [f"V09{linha}" for linha in resultados]
+    encontrados = re.findall(padrao, texto_unificado)
 
+    return [f"V09{codigo}" for codigo in encontrados]
 
 def salvar_arquivos(linhas, nome_base):
     pasta_downloads = str(Path.home() / "Downloads")
-    # caminho_csv = os.path.join(pasta_downloads, f"{nome_base}.csv")
     caminho_txt = os.path.join(pasta_downloads, f"{nome_base}.txt")
 
 
-# Salvar TXT
     with open(caminho_txt, 'w', encoding='utf-8') as f_txt:
         for linha in linhas:
             f_txt.write(f"{linha}\n")
 
     return caminho_txt
 
-
-# Função acionada no botão
 def processar_pdf():
     caminho_pdf = filedialog.askopenfilename(filetypes=[("PDF Files", "*.pdf")])
     if not caminho_pdf:
@@ -62,8 +56,6 @@ def processar_pdf():
 
     messagebox.showinfo("Sucesso", f"Arquivo salvo em:\n{caminho_txt}")
 
-
-# Interface com customtkinter
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("dark-blue")
 
